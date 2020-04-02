@@ -18,14 +18,14 @@ const startGame = () => {
     // Присваиваем переменной сгенерированное число
     const generatedNum = generatesNum(1, 100);
 
-    const game = () => {
+    const game = (randomNum) => {
         let enterVal = prompt('Угадай число от 1 до 100'); // Спрашиваем пользователя
         let enterNum = Number(enterVal);
 
         if (count === 0) {
             let gameOver = confirm('Попытки закончились, хотите сыграть еще?');
             return gameOver && startGame();
-        } else if (enterNum === generatedNum) {
+        } else if (enterNum === randomNum) {
             let gameWin = confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?');
             return gameWin && startGame();
         } else if (enterVal === null ) {
@@ -34,18 +34,18 @@ const startGame = () => {
         } else if (!isNumber(enterVal)) {
             alert('Введи число!');
             game();
-        } else if (enterNum > generatedNum && enterNum !== 0) {
+        } else if (enterNum > randomNum && enterNum !== 0) {
             --count;
             alert(`Загаданное число меньше, осталось попыток: ${count}`);
             game();
-        } else if (enterNum < generatedNum && enterNum !== 0) {
+        } else if (enterNum < randomNum && enterNum !== 0) {
             --count;
             alert(`Загаданное число больше, осталось попыток: ${count}`);
             game();
         }
     };
 
-    game();
+    game(generatedNum);
 };
 
 startGame();
