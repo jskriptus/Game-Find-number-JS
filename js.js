@@ -1,5 +1,3 @@
-const startGame = () => {
-
     let count = 10; // колличество попыток
 
     // Функция которая проверяет является ли переданный аргумент числом
@@ -18,34 +16,35 @@ const startGame = () => {
     // Присваиваем переменной сгенерированное число
     const generatedNum = generatesNum(1, 100);
 
-    const game = (randomNum) => {
+
+    const game = () => {
         let enterVal = prompt('Угадай число от 1 до 100'); // Спрашиваем пользователя
         let enterNum = Number(enterVal);
 
         if (count === 0) {
             let gameOver = confirm('Попытки закончились, хотите сыграть еще?');
-            return gameOver && startGame();
-        } else if (enterNum === randomNum) {
+            return gameOver && game();
+        } else if (enterNum === generatedNum) {
             let gameWin = confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?');
-            return gameWin && startGame();
-        } else if (enterVal === null ) {
+            return gameWin && game();
+        } else if (enterVal === null) {
             alert('Досвидания!');
             return;
         } else if (!isNumber(enterVal)) {
             alert('Введи число!');
-            game();
-        } else if (enterNum > randomNum && enterNum !== 0) {
+            return game();
+        } else if (enterNum > generatedNum && enterNum !== 0) {
             --count;
             alert(`Загаданное число меньше, осталось попыток: ${count}`);
-            game();
-        } else if (enterNum < randomNum && enterNum !== 0) {
+            return game();
+        } else if (enterNum < generatedNum && enterNum !== 0) {
             --count;
             alert(`Загаданное число больше, осталось попыток: ${count}`);
-            game();
+            return game();
         }
     };
 
-    game(generatedNum);
-};
+    game();
 
-startGame();
+    console.log(generatedNum)
+    console.dir(game);
