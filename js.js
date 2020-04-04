@@ -1,5 +1,3 @@
-    let count = 10; // колличество попыток
-
     // Функция которая проверяет является ли переданный аргумент числом
     function isNumber(n) {
         if (typeof n !== 'string') {
@@ -13,38 +11,45 @@
         return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
-    // Присваиваем переменной сгенерированное число
-    const generatedNum = generatesNum(1, 100);
-
-
-    const game = () => {
-        let enterVal = prompt('Угадай число от 1 до 100'); // Спрашиваем пользователя
-        let enterNum = Number(enterVal);
-
-        if (count === 0) {
-            let gameOver = confirm('Попытки закончились, хотите сыграть еще?');
-            return gameOver && game();
-        } else if (enterNum === generatedNum) {
-            let gameWin = confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?');
-            return gameWin && game();
-        } else if (enterVal === null) {
-            alert('Досвидания!');
-            return;
-        } else if (!isNumber(enterVal)) {
-            alert('Введи число!');
-            return game();
-        } else if (enterNum > generatedNum && enterNum !== 0) {
-            --count;
-            alert(`Загаданное число меньше, осталось попыток: ${count}`);
-            return game();
-        } else if (enterNum < generatedNum && enterNum !== 0) {
-            --count;
-            alert(`Загаданное число больше, осталось попыток: ${count}`);
-            return game();
-        }
+    // Функция которая отвечает за создание и изменение счетчика попыток
+    const getCount = () => {
+        let count = 5; // Храним колличество попыток
+        return function () {
+            return --count;
+        };
     };
 
-    game();
+    const startGame = () => {
+        const counter = getCount();
+        const generatedNum = generatesNum(1, 100);
 
-    console.log(generatedNum)
-    console.dir(game);
+        return function game() {
+            let count = counter(); // Храним колличество попыток которые возвращает функция counter()
+            
+            let enterVal = prompt('Угадай число от 1 до 100'); // Спрашиваем у пользователя его версию загаданного числа
+            let enterNum = Number(enterVal);
+
+            if (count <= 0) {
+                let gameOver = confirm('Попытки закончились, хотите сыграть еще?');
+                return gameOver && startGame()();
+            } else if (enterNum === generatedNum) {
+                let gameWin = confirm('Поздравляю, Вы угадали!!! \nХотели бы сыграть еще?');
+                return gameWin && startGame()();
+            } else if (enterVal === null) {
+                alert('Досвидания!');
+                return;
+            } else if (!isNumber(enterVal)) {
+                alert(`Ошибочка! \nВы ввели не число! \nОсталось попыток: ${count}`);
+                return game();
+            } else if (enterNum > generatedNum && enterNum !== 0) {
+                alert(`Загаданное число меньше! \nОсталось попыток: ${count}`);
+                return game();
+            } else if (enterNum < generatedNum && enterNum !== 0) {
+                alert(`Загаданное число больше! \nОсталось попыток: ${count}`);
+                return game();
+            }
+        };
+    };
+
+    const runGame = startGame();
+    runGame();
